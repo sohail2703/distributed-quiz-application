@@ -41,9 +41,9 @@
 
 		<module>api-gateway</module>
 
-<!--		<module>user-service</module>-->
+		<module>user-service</module>
 
-<!--		<module>question-service</module>-->
+		<module>question-service</module>
 
 <!--		<module>quiz-service</module>-->
 

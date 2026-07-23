@@ -9,6 +9,16 @@ spring:
     gateway:
       server:
         webflux:
+          routes:
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/api/users/**
+
+            - id: question-service
+              uri: lb://question-service
+              predicates:
+                - Path=/api/questions/**
           discovery:
             locator:
               enabled: true
