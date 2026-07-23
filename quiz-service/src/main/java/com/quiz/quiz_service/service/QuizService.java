@@ -6,8 +6,10 @@ import com.quiz.quiz_service.dto.QuestionResponse;
 import com.quiz.quiz_service.dto.SubmitQuizRequest;
 import com.quiz.quiz_service.entity.Quiz;
 import com.quiz.quiz_service.enums.QuizStatus;
+import com.quiz.quiz_service.event.QuizCompletedEvent;
 import com.quiz.quiz_service.exception.InvalidQuizStateException;
 import com.quiz.quiz_service.exception.QuizNotFoundException;
+import com.quiz.quiz_service.messaging.QuizEventProducer;
 import com.quiz.quiz_service.repository.QuizRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class QuizService {
     private final QuizRepository quizRepository;
 
     private final QuestionClient questionClient;
+    private final QuizEventProducer quizEventProducer;
 
     public Quiz createQuiz(CreateQuizRequest request) {
 
@@ -101,7 +104,20 @@ public class QuizService {
         quiz.setStatus(QuizStatus.COMPLETED);
         quiz.setCompletedAt(LocalDateTime.now());
 
-        return quizRepository.save(quiz);
+        Quiz savedQuiz = quizRepository.save(quiz);
+
+        QuizCompletedEvent event = new QuizCompletedEvent(
+                savedQuiz.getId(),
+                savedQuiz.getUserId(),
+                savedQuiz.getTitle(),
+                savedQuiz.getCategory(),
+                savedQuiz.getScore(),
+                savedQuiz.getTotalQuestions()
+        );
+
+        quizEventProducer.publishQuizCompletedEvent(event);
+
+        return savedQuiz;
     }
 
     private int calculateScore(

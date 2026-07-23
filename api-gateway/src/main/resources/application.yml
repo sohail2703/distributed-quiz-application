@@ -15,6 +15,11 @@ spring:
               predicates:
                 - Path=/api/users/**
 
+            - id: leaderboard-service
+              uri: lb://LEADERBOARD-SERVICE
+              predicates:
+                - Path=/api/leaderboards/**
+
             - id: quiz-service
               uri: lb://quiz-service
               predicates:

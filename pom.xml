@@ -47,6 +47,7 @@
 
 		<module>quiz-service</module>
 
+		<module>leaderboard-service</module>
 	</modules>
 
 	<!-- Spring Cloud Dependency Management -->
