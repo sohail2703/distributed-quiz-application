@@ -45,7 +45,7 @@
 
 		<module>question-service</module>
 
-<!--		<module>quiz-service</module>-->
+		<module>quiz-service</module>
 
 	</modules>
 
